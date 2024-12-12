@@ -6,7 +6,7 @@
 
 
 name: Veracode Demo
-on:  push
+on:  workflow_call
     # branches:
     #   - pipeline-scan
     #   - policy-scan
