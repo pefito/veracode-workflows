@@ -90,6 +90,7 @@ jobs:
           VKEY: ${{ secrets.VKEY }}
           PATH: ${{env.package_path}}
         run: |
+          #!/bin/bash
           FILES=("$PATH"/*)
           NUM_FILES=${#FILES[@]}
 
