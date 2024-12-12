@@ -31,33 +31,33 @@ env:
 # gerar mais de um .zip e o comando 'mv' deve ser ajustado
 
 jobs:
-  Package:
-    name: Veracode Package
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout https://github.com/${{ github.repository }}@${{ github.ref }}
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - name: Veracode Package
-        env:
-          VERACODE_API_KEY_ID: ${{ secrets.VID }}
-          VERACODE_API_KEY_SECRET: ${{ secrets.VKEY }}
-        run: |
-          curl -fsS https://tools.veracode.com/veracode-cli/install | sh
-          ./veracode package --source . --output ${{env.package_path}} --trust
-          ls -lah ${{env.package_path}}
-      - name: Upload artfacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: artfacts
-          path: ${{env.package_path}}/*
+  # Package:
+  #   name: Veracode Package
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout https://github.com/${{ github.repository }}@${{ github.ref }}
+  #       uses: actions/checkout@v4
+  #       with:
+  #         persist-credentials: false
+  #     - name: Veracode Package
+  #       env:
+  #         VERACODE_API_KEY_ID: ${{ secrets.VID }}
+  #         VERACODE_API_KEY_SECRET: ${{ secrets.VKEY }}
+  #       run: |
+  #         curl -fsS https://tools.veracode.com/veracode-cli/install | sh
+  #         ./veracode package --source . --output ${{env.package_path}} --trust
+  #         ls -lah ${{env.package_path}}
+  #     - name: Upload artfacts
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: artfacts
+  #         path: ${{env.package_path}}/*
 
   Veracode-SCA:
     #if: github.ref == 'refs/heads/pipeline-scan'
     name: Veracode SCA Pipeline
     runs-on: ubuntu-latest
-    needs: [Package]
+    # needs: [Package]
     steps:
       - name: Checkout https://github.com/${{ github.repository }}@${{ github.ref }}
         uses: actions/checkout@v4
