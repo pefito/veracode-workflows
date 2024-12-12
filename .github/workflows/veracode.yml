@@ -83,6 +83,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: [Package]
     steps:
+      - name: Download pipeline scan
+        run: |
+          curl -O -L https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+          unzip -u pipeline-scan-LATEST.zip
       - name: Pipeline Scan with wrapper - default policy
         env:
           POLICY_NAME: Veracode Recommended High
@@ -90,10 +94,6 @@ jobs:
           VKEY: ${{ secrets.VKEY }}
           PATH: ${{env.package_path}}
         run: |
-          curl -sSL https://sca-downloads.veracode.com/ci.sh
-          curl -O -L https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
-          unzip -u pipeline-scan-LATEST.zip
-
           FILES=("$PATH"/*)
           NUM_FILES=${#FILES[@]}
 
