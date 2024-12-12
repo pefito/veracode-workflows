@@ -52,7 +52,7 @@ jobs:
           # ./veracode package --source . --output ${{ env.package_path }} --trust
           # ls -lah ${{env.package_path}}
           mkdir ${{env.package_path}}
-          touch ${{env.package_path}}/file1.txt && touch ${{env.package_path}}/file2.txt && touch ${{env.package_path}}/file3.txt &&
+          touch ${{env.package_path}}/file1.txt && touch ${{env.package_path}}/file2.txt && touch ${{env.package_path}}/file3.txt
       - name: Upload artfacts
         uses: actions/upload-artifact@v4
         with:
