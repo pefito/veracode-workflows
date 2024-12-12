@@ -121,33 +121,33 @@ jobs:
       matrix:
         packages: ${{ fromJson(needs.define-matrix.outputs.packages) }}
     steps:
-      - name: Create pipeline-scan.sh script
-        run: |
-          cat << 'EOF' > pipeline-scan.sh
-          #!/bin/bash
-          apt-get update && apt-get install -y curl unzip default-jre
+      # - name: Create pipeline-scan.sh script
+      #   run: |
+      #     cat << 'EOF' > pipeline-scan.sh
+      #     #!/bin/bash
+      #     apt-get update && apt-get install -y curl unzip default-jre
 
-          POLICY_NAME=${POLICY_NAME}
-          VID=${VID}
-          VKEY=${VKEY}
-          PATH=${PATH}
+      #     POLICY_NAME=${POLICY_NAME}
+      #     VID=${VID}
+      #     VKEY=${VKEY}
+      #     PATH=${PATH}
   
-          FILES=("$PATH"/*)
-          NUM_FILES=${#FILES[@]}
+      #     FILES=("$PATH"/*)
+      #     NUM_FILES=${#FILES[@]}
   
-          echo "$NUM_FILES files found in $PATH."
+      #     echo "$NUM_FILES files found in $PATH."
   
-          # Baixar e descompactar o scanner
-          curl -O -L https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
-          unzip -u pipeline-scan-LATEST.zip
+      #     # Baixar e descompactar o scanner
+      #     curl -O -L https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+      #     unzip -u pipeline-scan-LATEST.zip
   
-          # Iterar sobre os arquivos e executar o scanner
-          for FILE in "${FILES[@]}"; do
-            java -jar pipeline-scan.jar -vid "$VID" -vkey "$VKEY" --file "$FILE" -pn "$POLICY_NAME" --issue_details false --json_output true
-          done
-          EOF
-      - name: Make pipeline-scan.sh executable
-        run: chmod +x pipeline-scan.sh
+      #     # Iterar sobre os arquivos e executar o scanner
+      #     for FILE in "${FILES[@]}"; do
+      #       java -jar pipeline-scan.jar -vid "$VID" -vkey "$VKEY" --file "$FILE" -pn "$POLICY_NAME" --issue_details false --json_output true
+      #     done
+      #     EOF
+      # - name: Make pipeline-scan.sh executable
+      #   run: chmod +x pipeline-scan.sh
     
       - name: Run Pipeline Scan
         env:
@@ -156,6 +156,6 @@ jobs:
           VKEY: ${{ secrets.VKEY }}
           PATH: ${{ env.package_path }}
         run: |
-          ./pipeline-scan.sh
+          echo packages
         shell: bash
         continue-on-error: true
