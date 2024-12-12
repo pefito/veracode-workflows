@@ -67,11 +67,11 @@ jobs:
       - name: Echo secret
         env:
           VAR: ${{secrets.SRCCLR_API_TOKEN}}
-        run: echo $(echo ${VAR} | base64)
+        run: echo "$(echo ${VAR} | base64)"
       - name: Echo secret VID
         env:
           VAR: ${{secrets.VID}}
-        run: echo $(echo ${VAR} | base64)
+        run: echo "$(echo ${VAR} | base64)"
 
       - name: Veracode SCA
         env:
