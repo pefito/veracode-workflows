@@ -96,9 +96,13 @@ jobs:
           PATH: ${{ env.package_path }}
         id: packages
         run: |
-          FILES=("$PATH"/*)
-          echo "files=${FILES[*]}"
-          echo "packages=$(IFS=,; echo "${FILES[*]}")" >> $GITHUB_OUTPUT
+            FILES=("$PATH"/*)
+            # Converte o array FILES em um array JSON:
+            # 1) `printf '%s\n' "${FILES[@]}"` lista os arquivos, um por linha
+            # 2) `awk` adiciona aspas e vírgula a cada linha
+            # 3) `sed 's/,$//'` remove a última vírgula no final
+            JSON_ARRAY=$(printf '%s\n' "${FILES[@]}" | awk '{printf "\"" $0 "\","}' | sed 's/,$//')
+            echo "packages=[$JSON_ARRAY]" >> $GITHUB_OUTPUT
       - name: check
         run: |
           echo $GITHUB_OUTPUT
