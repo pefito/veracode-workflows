@@ -49,7 +49,7 @@ jobs:
           VERACODE_API_KEY_SECRET: ${{ secrets.VKEY }}
         run: |
           curl -fsS https://tools.veracode.com/veracode-cli/install | sh
-          ./veracode package --source . --output ${{env.package_path}} --trust
+          ./veracode package --source . --output ${{ env.package_path }} --trust
           ls -lah ${{env.package_path}}
       - name: Upload artfacts
         uses: actions/upload-artifact@v4
@@ -70,7 +70,7 @@ jobs:
       - name: Veracode SCA
         env:
           SCAN_DIR: '.'
-          SRCCLR_API_TOKEN: ${{secrets.SRCCLR_API_TOKEN}}
+          SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
           SRCCLR_SCM_REF_TYPE: 'branch'
           SRCCLR_SCM_REF: ${{ github.ref }}
           SRCCLR_SCM_REV: ${{ github.run_id }}
