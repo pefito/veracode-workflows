@@ -98,7 +98,7 @@ jobs:
         run: |
           FILES=($(ls ./path))
           echo "files=${FILES[*]}"
-          echo "packages=$(printf '%s\n' ${FILES[*]} | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPU
+          echo "packages=$(printf '%s\n' ${FILES[*]} | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
       - name: check
         run: |
           echo $GITHUB_OUTPUT
