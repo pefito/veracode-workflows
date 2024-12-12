@@ -97,11 +97,11 @@ jobs:
 
           echo "$NUM_FILES files found in $PATH."
 
-          curl -O -L https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
-          unzip -u pipeline-scan-LATEST.zip
+          $(curl -O -L https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip)
+          $(unzip -u pipeline-scan-LATEST.zip)
 
           # Iterar sobre os arquivos e chamar a função para scan
           for FILE in "${FILES[@]}"; do
-              java -jar pipeline-scan.jar -vid "$VID" -vkey "$VKEY" --file "$FILE" -pn "${{ env.POLICY_NAME }}" --issue_details false --json_output true
+              $(java -jar pipeline-scan.jar -vid "$VID" -vkey "$VKEY" --file "$FILE" -pn "${{ env.POLICY_NAME }}" --issue_details false --json_output true)
           done
         continue-on-error: true
