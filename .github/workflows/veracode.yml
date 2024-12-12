@@ -78,7 +78,7 @@ jobs:
     name: Veracode Scan
     runs-on: ubuntu-latest
     needs:
-      - define-matrix
+      - [Package]
     strategy:
       matrix:
         packages: ${{ fromJson(needs.Package.outputs.packages) }}
