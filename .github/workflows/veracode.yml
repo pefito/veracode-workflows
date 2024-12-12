@@ -97,7 +97,7 @@ jobs:
         with:
           vid: "${{ secrets.VID }}"
           vkey: "${{ secrets.VKEY }}"
-          file: "${{ matrix.packages }}"
+          file: "./${{ matrix.packages }}"
           veracode_policy_name: "Veracode Recommended Medium"
           fail_build: false
           issue_details: true
@@ -106,7 +106,7 @@ jobs:
         uses: veracode/veracode-uploadandscan-action@0.2.7
         with:
           appname: "${{ github.repository }}"
-          filepath: "${{ matrix.packages }}"
+          filepath: "./${{ matrix.packages }}"
           vid: "${{ secrets.VID }}"
           vkey: "${{ secrets.VKEY }}"
           deleteincompletescan: 2
