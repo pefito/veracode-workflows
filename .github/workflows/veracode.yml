@@ -65,9 +65,13 @@ jobs:
           persist-credentials: false
 
       - name: Echo secret
-        run: echo $(echo ${{secrets.SRCCLR_API_TOKEN}} | base64)
+        env:
+          VAR: ${{secrets.SRCCLR_API_TOKEN}}
+        run: echo $(echo ${VAR} | base64)
       - name: Echo secret VID
-        run: echo $(echo ${{secrets.VID}} | base64)
+        env:
+          VAR: ${{secrets.VID}}
+        run: echo $(echo ${VAR} | base64)
 
       - name: Veracode SCA
         env:
