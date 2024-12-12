@@ -83,7 +83,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [Package]
     steps:
-
       - name: Create pipeline-scan.sh script
         run: |
           cat << 'EOF' > pipeline-scan.sh
@@ -112,11 +111,10 @@ jobs:
         run: chmod +x pipeline-scan.sh
     
       - name: Run Pipeline Scan
-        shell: bash
         env:
           POLICY_NAME: Veracode Recommended High
           VID: ${{ secrets.VID }}
           VKEY: ${{ secrets.VKEY }}
           PATH: ${{ env.package_path }}
-        run: ./pipeline-scan.sh
+        run: sh ./pipeline-scan.sh
         continue-on-error: true
