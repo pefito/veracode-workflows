@@ -80,23 +80,25 @@ jobs:
         continue-on-error: true
   define-matrix:
     runs-on: ubuntu-latest
+    needs: [Package]
     outputs:
       packages: ${{ steps.packages.outputs.packages }}
     steps:
-      - name: Define Colors
+      - name: Define matrix
         env:
           PATH: ${{ env.package_path }}
         id: packages
         run: |
           echo 'FILES=("$PATH"/*)' >> "$GITHUB_OUTPUT"
-          echo "$NUM_FILES files found in $PATH."
+      - name: check
+        run: |
+          echo $GITHUB_OUTPUT
 
   Veracode-Pipeline-Scan:
     name: Veracode SAST Pipeline
     runs-on: ubuntu-latest
     needs:
       - define-matrix
-      - Package
     strategy:
       matrix:
         packages: ${{ fromJSON(needs.define-matrix.outputs.packages) }}
