@@ -1,0 +1,50 @@
+##Antes de iniciar, crie os seguintes secrets para o repositório:
+## "VID" com o conteúdo da VERACODE API KEY ID
+## "VKEY" com o conteúdo da VERACODE API KEY SECRET
+## "SRCCLR" com o conteúdo da chave do AGENT SCAN
+## Essas chaves devem ser geradas no portal da Veracode
+
+
+name: Veracode Demo
+on:  push
+    # branches:
+    #   - pipeline-scan
+    #   - policy-scan
+    #   - sandbox-scan
+##Nome das branches opcional, caso queira criar múltiplas branches e executar
+#cada scan em uma branch específica. Em cada stage também há um if: para
+#validar se a stage deve ser executada naquela branch.
+
+env:
+  package_path: 'verascan'
+  package_name: 'verademo.war'
+## O nome da variável package_path pode ser modificado. Será criado um diretório
+# com esse nome e o conteudo do package será salvo nele.
+## O nome da variável package_name irá depender da linguagem/nome do projeto.
+# Valide no link abaixo os padrões do Veracode Package ou execute
+# uma vez e veja nos logs o nome do arquivo gerado.
+## https://docs.veracode.com/r/About_auto_packaging#packaged-artifacts
+
+## Também é possível utilizar o comando 'mv' (comentado abaixo) para renomear
+# o package gerado para um nome genérico e utilizá-lo nas tasks seguintes, porém
+# caso o comando package identifique mais de uma linguagem no repositório, ele irá
+# gerar mais de um .zip e o comando 'mv' deve ser ajustado
+
+jobs:
+  Package:
+    name: Veracode Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout https://github.com/${{ github.repository }}@${{ github.ref }}
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Veracode Package
+        env:
+          VERACODE_API_KEY_ID: ${{ secrets.VID }}
+          VERACODE_API_KEY_SECRET: ${{ secrets.VKEY }}
+        run: |
+          curl -fsS https://tools.veracode.com/veracode-cli/install | sh
+          ./veracode package --source . --output ${{env.package_path}} --trust
+          ls -lah ${{env.package_path}}
+          # mv ${{env.package_path}}/${{env.package_name}} ${{env.package_path}}/package
