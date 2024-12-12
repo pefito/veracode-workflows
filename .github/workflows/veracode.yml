@@ -156,6 +156,6 @@ jobs:
           VKEY: ${{ secrets.VKEY }}
           PATH: ${{ env.package_path }}
         run: |
-          echo packages
+          echo ${{ matrix.packages }}
         shell: bash
         continue-on-error: true
