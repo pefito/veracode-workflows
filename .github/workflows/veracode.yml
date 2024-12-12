@@ -106,6 +106,7 @@ jobs:
         uses: veracode/veracode-uploadandscan-action@0.2.7
         with:
           appname: "${{ github.repository }}"
+          createprofile: true
           filepath: "./${{ matrix.packages }}"
           vid: "${{ secrets.VID }}"
           vkey: "${{ secrets.VKEY }}"
