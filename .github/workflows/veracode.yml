@@ -6,11 +6,7 @@
 
 
 name: Veracode Demo
-on:  
-  workflow_call:
-    secrets:
-      SRCCLR:
-        required: true
+on:  workflow_call
     # branches:
     #   - pipeline-scan
     #   - policy-scan
