@@ -80,13 +80,9 @@ jobs:
         continue-on-error: true
   Veracode-Pipeline-Scan:
     name: Veracode SCA Pipeline
-    runs-on: ubuntu-latest
+    runs-on: veracode/pipeline-scan:latest
     needs: [Package]
     steps:
-      - name: Download pipeline scan
-        run: |
-          curl -O -L https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
-          unzip -u pipeline-scan-LATEST.zip
       - name: Pipeline Scan with wrapper - default policy
         env:
           POLICY_NAME: Veracode Recommended High
@@ -101,6 +97,6 @@ jobs:
 
           # Iterar sobre os arquivos e chamar a função para scan
           for FILE in "${FILES[@]}"; do
-              java -jar pipeline-scan.jar -vid "$VID" -vkey "$VKEY" --file "$FILE" -pn "${{ env.POLICY_NAME }}" --issue_details false --json_output true
+              java -jar /opt/veracode/pipeline-scan.jar -vid "$VID" -vkey "$VKEY" --file "$FILE" -pn "${{ env.POLICY_NAME }}" --issue_details false --json_output true
           done
         continue-on-error: true
