@@ -116,5 +116,5 @@ jobs:
           VID: ${{ secrets.VID }}
           VKEY: ${{ secrets.VKEY }}
           PATH: ${{ env.package_path }}
-        run: sh ./pipeline-scan.sh
+        run: bash ./pipeline-scan.sh
         continue-on-error: true
