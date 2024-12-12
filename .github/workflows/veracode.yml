@@ -90,14 +90,14 @@ jobs:
           VKEY: ${{ secrets.VKEY }}
           PATH: ${{env.package_path}}
         run: |
-          #!/bin/bash
+          curl -sSL https://sca-downloads.veracode.com/ci.sh
+          curl -O -L https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+          unzip -u pipeline-scan-LATEST.zip
+
           FILES=("$PATH"/*)
           NUM_FILES=${#FILES[@]}
 
           echo "$NUM_FILES files found in $PATH."
-
-          curl -O -L https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
-          unzip -u pipeline-scan-LATEST.zip
 
           # Iterar sobre os arquivos e chamar a função para scan
           for FILE in "${FILES[@]}"; do
