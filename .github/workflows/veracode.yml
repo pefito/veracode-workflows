@@ -107,11 +107,12 @@ jobs:
           fail_build: false
           issue_details: true
 
-      - name: Upload and Scan - Action
+      - name: Upload and Scan with Action by Veracode
         uses: veracode/veracode-uploadandscan-action@0.2.7
         with:
           appname: "${{ github.repository }}"
           createprofile: true
+          teams: "Showroom_Phelipe"
           filepath: "./${{ matrix.packages }}"
           vid: "${{ secrets.VID }}"
           vkey: "${{ secrets.VKEY }}"
