@@ -156,6 +156,8 @@ jobs:
           VKEY: ${{ secrets.VKEY }}
           PATH: ${{ env.package_path }}
         run: |
-          echo ${{ matrix.packages }}
+          curl -O -L https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+          unzip -u pipeline-scan-LATEST.zip
+          java -jar pipeline-scan.jar -vid "$VID" -vkey "$VKEY" --file "${{ matrix.packages }}" -pn "$POLICY_NAME" --issue_details false --json_output true
         shell: bash
         continue-on-error: true
