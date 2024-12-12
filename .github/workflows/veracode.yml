@@ -117,4 +117,5 @@ jobs:
           VKEY: ${{ secrets.VKEY }}
           PATH: ${{ env.package_path }}
         run: bash ./pipeline-scan.sh
+        shell: bash
         continue-on-error: true
