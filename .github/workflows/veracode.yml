@@ -91,16 +91,16 @@ jobs:
       matrix:
         packages: ${{ fromJson(needs.define-matrix.outputs.packages) }}
     steps:
-      - name: Pipeline Scan with Action by Veracode
-      # https://github.com/marketplace/actions/veracode-pipeline-scan
-        uses: veracode/Veracode-pipeline-scan-action@v1.0.15
-        with:
-          vid: "${{ secrets.VID }}"
-          vkey: "${{ secrets.VKEY }}"
-          file: "./${{ matrix.packages }}"
-          veracode_policy_name: "Veracode Recommended Medium"
-          fail_build: false
-          issue_details: true
+      # - name: Pipeline Scan with Action by Veracode
+      # # https://github.com/marketplace/actions/veracode-pipeline-scan
+      #   uses: veracode/Veracode-pipeline-scan-action@v1.0.15
+      #   with:
+      #     vid: "${{ secrets.VID }}"
+      #     vkey: "${{ secrets.VKEY }}"
+      #     file: "./${{ matrix.packages }}"
+      #     veracode_policy_name: "Veracode Recommended Medium"
+      #     fail_build: false
+      #     issue_details: true
 
       - name: Upload and Scan - Action
         uses: veracode/veracode-uploadandscan-action@0.2.7
