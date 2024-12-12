@@ -98,7 +98,7 @@ jobs:
         run: |
           FILES=("$PATH"/*)
           echo "files=${FILES[*]}"
-          echo "packages=$(printf '%s\n' ${FILES[*]} | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+          echo "packages=$(IFS=,; echo "${FILES[*]}")" >> $GITHUB_OUTPUT
       - name: check
         run: |
           echo $GITHUB_OUTPUT
@@ -110,7 +110,7 @@ jobs:
       - define-matrix
     strategy:
       matrix:
-        packages: ${{ fromJSON(needs.define-matrix.outputs.packages) }}
+        packages: ${{ needs.define-matrix.outputs.packages }}
     steps:
       - name: Create pipeline-scan.sh script
         run: |
