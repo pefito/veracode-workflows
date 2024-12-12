@@ -83,26 +83,40 @@ jobs:
     runs-on: ubuntu-latest
     needs: [Package]
     steps:
-      - name: Pipeline Scan with wrapper - default policy
+
+      - name: Create pipeline-scan.sh script
+        run: |
+          cat << 'EOF' > pipeline-scan.sh
+          #!/bin/bash
+
+          POLICY_NAME=${POLICY_NAME}
+          VID=${VID}
+          VKEY=${VKEY}
+          PATH=${PATH}
+  
+          FILES=("$PATH"/*)
+          NUM_FILES=${#FILES[@]}
+  
+          echo "$NUM_FILES files found in $PATH."
+  
+          # Baixar e descompactar o scanner
+          curl -O -L https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+          unzip -u pipeline-scan-LATEST.zip
+  
+          # Iterar sobre os arquivos e executar o scanner
+          for FILE in "${FILES[@]}"; do
+            java -jar pipeline-scan.jar -vid "$VID" -vkey "$VKEY" --file "$FILE" -pn "$POLICY_NAME" --issue_details false --json_output true
+          done
+          EOF
+      - name: Make pipeline-scan.sh executable
+        run: chmod +x pipeline-scan.sh
+    
+      - name: Run Pipeline Scan
         shell: bash
         env:
           POLICY_NAME: Veracode Recommended High
           VID: ${{ secrets.VID }}
           VKEY: ${{ secrets.VKEY }}
           PATH: ${{ env.package_path }}
-        run: |
-          FILES=("$PATH"/*)
-          NUM_FILES=${#FILES[@]}
-
-          echo "$NUM_FILES files found in $PATH."
-
-          # Baixar e descompactar o scanner do Veracode
-          curl -O -L https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
-          unzip -u pipeline-scan-LATEST.zip
-
-          # Iterar sobre os arquivos e executar o scanner
-          for FILE in "${FILES[@]}"; do
-            java -jar pipeline-scan.jar -vid "$VID" -vkey "$VKEY" --file "$FILE" -pn "$POLICY_NAME" --issue_details false --json_output true
-          done
-
+        run: ./pipeline-scan.sh
         continue-on-error: true
