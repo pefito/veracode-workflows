@@ -119,7 +119,7 @@ jobs:
       - define-matrix
     strategy:
       matrix:
-        packages: ${{ needs.define-matrix.outputs.packages }}
+        packages: ${{ fromJson(needs.define-matrix.outputs.packages) }}
     steps:
       - name: Create pipeline-scan.sh script
         run: |
