@@ -96,7 +96,9 @@ jobs:
           PATH: ${{ env.package_path }}
         id: packages
         run: |
-          echo 'FILES=("$PATH"/*)' >> "$GITHUB_OUTPUT"
+          FILES=($(ls ./path))
+          echo "files=${FILES[*]}"
+          echo "packages=$(printf '%s\n' ${FILES[*]} | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPU
       - name: check
         run: |
           echo $GITHUB_OUTPUT
