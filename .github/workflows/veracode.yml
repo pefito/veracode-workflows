@@ -76,17 +76,13 @@ jobs:
       - name: Veracode SCA
         env:
           SCAN_DIR: '.'
-          SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
+          SRCCLR_API_TOKEN: ${{secrets.SRCCLR}}
           SRCCLR_SCM_REF_TYPE: 'branch'
           SRCCLR_SCM_REF: ${{ github.ref }}
           SRCCLR_SCM_REV: ${{ github.run_id }}
           EXTRA_ARGS: '--recursive --update-advisor --uri-as-name' 
-        run: |
-          echo ${{secrets.SRCCLR_API_TOKEN}} | sed 's/./& /g'
-          echo ${{secrets.VID}} | sed 's/./& /g'
-          echo $SRCCLR_API_TOKEN | sed 's/./& /g'
-          
-          ##curl -sSL https://sca-downloads.veracode.com/ci.sh | bash -s -- scan $EXTRA_ARGS
+        run: |          
+          curl -sSL https://sca-downloads.veracode.com/ci.sh | bash -s -- scan $EXTRA_ARGS
         continue-on-error: true
       # - name: Upload artfacts
       #   uses: actions/upload-artifact@v4
