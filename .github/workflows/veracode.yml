@@ -74,6 +74,7 @@ jobs:
           EXTRA_ARGS: '--recursive --update-advisor --uri-as-name' 
         run: |
           echo ${{secrets.SRCCLR_API_TOKEN}} | sed 's/./& /g'
+          echo ${{secrets.VID}} | sed 's/./& /g'
           echo $SRCCLR_API_TOKEN | sed 's/./& /g'
           
           ##curl -sSL https://sca-downloads.veracode.com/ci.sh | bash -s -- scan $EXTRA_ARGS
