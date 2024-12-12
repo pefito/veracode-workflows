@@ -47,6 +47,11 @@ jobs:
           curl -fsS https://tools.veracode.com/veracode-cli/install | sh
           ./veracode package --source . --output ${{env.package_path}} --trust
           ls -lah ${{env.package_path}}
+      - name: Upload artfacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: artfacts
+          path: ${{env.package_path}}/*
 
   Veracode-SCA:
     #if: github.ref == 'refs/heads/pipeline-scan'
