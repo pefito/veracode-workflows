@@ -1,0 +1,43 @@
+##Antes de iniciar, crie os seguintes secrets para o repositório:
+## "VID" com o conteúdo da VERACODE API KEY ID
+## "VKEY" com o conteúdo da VERACODE API KEY SECRET
+## "SRCCLR" com o conteúdo da chave do AGENT SCAN
+## Essas chaves devem ser geradas no portal da Veracode
+
+
+name: Veracode Demo
+on:  
+  workflow_call:
+    inputs:
+      packages:
+        required: true
+        type: string
+
+env:
+  package_path: 'verascan'
+
+jobs:
+ 
+  Veracode-Scan:
+    name: Veracode Scan
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        packages: ${{ fromJson(inputs.packages) }}
+    steps:
+      - name: Download artfacts
+        uses: actions/download-artifact@v4
+        with:
+          name: artfacts
+          path: ./${{env.package_path}}
+      - name: Pipeline Scan with Action by Veracode
+      # https://github.com/marketplace/actions/veracode-pipeline-scan
+        uses: veracode/Veracode-pipeline-scan-action@v1.0.15
+        with:
+          vid: "${{ secrets.VID }}"
+          vkey: "${{ secrets.VKEY }}"
+          file: "./${{ matrix.packages }}"
+          veracode_policy_name: "Veracode Recommended Medium"
+          fail_build: false
+          issue_details: true
+        continue-on-error: true
