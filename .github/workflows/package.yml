@@ -1,0 +1,60 @@
+##Antes de iniciar, crie os seguintes secrets para o repositório:
+## "VID" com o conteúdo da VERACODE API KEY ID
+## "VKEY" com o conteúdo da VERACODE API KEY SECRET
+## "SRCCLR" com o conteúdo da chave do AGENT SCAN
+## Essas chaves devem ser geradas no portal da Veracode
+
+
+name: Veracode Demo
+on:  
+  workflow_call:
+    outputs:
+      packages:
+        description: "package matrix"
+        value: ${{ jobs.Package.outputs.packages }}
+
+env:
+  package_path: 'verascan'
+
+jobs:
+  Package:
+    name: Veracode Package
+    runs-on: ubuntu-latest
+    outputs:
+      packages: ${{ steps.packages.outputs.packages }}
+    steps:
+      - name: Checkout https://github.com/${{ github.repository }}@${{ github.ref }}
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Veracode Package
+        env:
+          VERACODE_API_KEY_ID: ${{ secrets.VID }}
+          VERACODE_API_KEY_SECRET: ${{ secrets.VKEY }}
+        run: |
+          curl -fsS https://tools.veracode.com/veracode-cli/install | sh
+          ./veracode package --source . --output ${{ env.package_path }} --trust
+          ls -lah ${{env.package_path}}
+      - name: Define matrix
+        env:
+          PATH: ${{ env.package_path }}
+        id: packages
+        run: |
+            FILES=("$PATH"/*)
+            JSON_ARRAY="["
+        
+            # Constrói o array JSON manualmente
+            for FILE in "${FILES[@]}"; do
+              JSON_ARRAY+="\"$FILE\","
+            done
+        
+            # Remove a última vírgula e fecha o array
+            JSON_ARRAY="${JSON_ARRAY%,}]"
+        
+            echo "packages=$JSON_ARRAY" >> $GITHUB_OUTPUT
+
+      - name: Upload artfacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: artfacts
+          path: ${{env.package_path}}/*
